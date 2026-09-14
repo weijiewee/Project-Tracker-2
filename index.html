@@ -1,26 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Portfolio Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-https://cdn.tailwindcss.comscript>
+    <title>Project Portfolio Tracker</title>
 
-<style>
-body{
-    background:#f1f5f9;
-}
-.card{
-    transition:0.3s;
-}
-.card:hover{
-    transform:translateY(-3px);
-}
-</style>
+    https://cdn.tailwindcss.comscript>
 </head>
 
-<body>
+<body class="bg-slate-100 min-h-screen">
 
 <div class="max-w-7xl mx-auto p-6">
 
@@ -29,42 +19,42 @@ body{
             Project Portfolio Tracker
         </h1>
         <p class="text-slate-500 mt-2">
-            Project Status and Ownership Dashboard
+            Executive Dashboard for Project Tracking
         </p>
     </div>
 
-    <!-- Summary Dashboard -->
+    <!-- Dashboard -->
 
     <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
 
-        <div class="bg-white rounded-2xl shadow p-5 card">
+        <div class="bg-white rounded-2xl shadow p-5">
             <div class="text-gray-500">Total Projects</div>
             <div id="totalProjects" class="text-3xl font-bold">0</div>
         </div>
 
-        <div class="bg-blue-50 rounded-2xl shadow p-5 card">
-            <div class="text-blue-600">In Progress</div>
-            <div id="inProgress" class="text-3xl font-bold text-blue-700">0</div>
+        <div class="bg-blue-100 rounded-2xl shadow p-5">
+            <div class="text-blue-700">In Progress</div>
+            <div id="inProgress" class="text-3xl font-bold">0</div>
         </div>
 
-        <div class="bg-green-50 rounded-2xl shadow p-5 card">
-            <div class="text-green-600">Completed</div>
-            <div id="completed" class="text-3xl font-bold text-green-700">0</div>
+        <div class="bg-green-100 rounded-2xl shadow p-5">
+            <div class="text-green-700">Completed</div>
+            <div id="completed" class="text-3xl font-bold">0</div>
         </div>
 
-        <div class="bg-red-50 rounded-2xl shadow p-5 card">
-            <div class="text-red-600">At Risk</div>
-            <div id="atRisk" class="text-3xl font-bold text-red-700">0</div>
+        <div class="bg-red-100 rounded-2xl shadow p-5">
+            <div class="text-red-700">At Risk</div>
+            <div id="atRisk" class="text-3xl font-bold">0</div>
         </div>
 
-        <div class="bg-gray-50 rounded-2xl shadow p-5 card">
-            <div class="text-gray-600">Not Started</div>
-            <div id="notStarted" class="text-3xl font-bold text-gray-700">0</div>
+        <div class="bg-gray-100 rounded-2xl shadow p-5">
+            <div class="text-gray-700">Not Started</div>
+            <div id="notStarted" class="text-3xl font-bold">0</div>
         </div>
 
-        <div class="bg-emerald-50 rounded-2xl shadow p-5 card">
-            <div class="text-emerald-600">Completion %</div>
-            <div id="completionRate" class="text-3xl font-bold text-emerald-700">0%</div>
+        <div class="bg-emerald-100 rounded-2xl shadow p-5">
+            <div class="text-emerald-700">Completion %</div>
+            <div id="completionRate" class="text-3xl font-bold">0%</div>
         </div>
 
     </div>
@@ -80,19 +70,19 @@ body{
         <div class="grid md:grid-cols-5 gap-4">
 
             <input id="projectName"
-                class="border rounded-lg p-3"
-                placeholder="Project Name">
+                   class="border rounded-lg p-3"
+                   placeholder="Project Name">
 
             <input id="owner"
-                class="border rounded-lg p-3"
-                placeholder="Owner">
+                   class="border rounded-lg p-3"
+                   placeholder="Owner">
 
             <input id="startDate"
-                type="date"
-                class="border rounded-lg p-3">
+                   type="date"
+                   class="border rounded-lg p-3">
 
             <select id="status"
-                class="border rounded-lg p-3">
+                    class="border rounded-lg p-3">
 
                 <option>Not Started</option>
                 <option>In Progress</option>
@@ -102,255 +92,11 @@ body{
             </select>
 
             <input id="remarks"
-                class="border rounded-lg p-3"
-                placeholder="Remarks">
+                   class="border rounded-lg p-3"
+                   placeholder="Remarks">
 
         </div>
 
         <button
             onclick="addProject()"
-            class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
-            Add Project
-        </button>
-
-    </div>
-
-
-    <!-- Portfolio -->
-
-    <div class="bg-white rounded-2xl shadow overflow-hidden">
-
-        <div class="p-6 border-b">
-            <h2 class="text-xl font-bold">
-                Project Portfolio
-            </h2>
-        </div>
-
-        <div class="overflow-x-auto">
-
-        <table class="w-full">
-
-            <thead class="bg-slate-50">
-
-                <tr>
-                    <th class="p-4 text-left">Project Name</th>
-                    <th class="p-4 text-left">Owner</th>
-                    <th class="p-4 text-left">Start Date</th>
-                    <th class="p-4 text-left">Status</th>
-                    <th class="p-4 text-left">Remarks</th>
-                    <th class="p-4 text-left">Age (Days)</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="projectTable">
-
-            </tbody>
-
-        </table>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script>
-
-let projects = JSON.parse(localStorage.getItem("projects")) || [
-{
-id:1,
-name:"ERP Transformation",
-owner:"Sarah Lim",
-startDate:"2026-01-01",
-status:"In Progress",
-remarks:"UAT ongoing"
-},
-{
-id:2,
-name:"CRM Migration",
-owner:"John Tan",
-startDate:"2026-02-15",
-status:"Completed",
-remarks:"Successfully deployed"
-}
-];
-
-function saveData(){
-localStorage.setItem("projects", JSON.stringify(projects));
-}
-
-function addProject(){
-
-const name=document.getElementById("projectName").value;
-const owner=document.getElementById("owner").value;
-const startDate=document.getElementById("startDate").value;
-const status=document.getElementById("status").value;
-const remarks=document.getElementById("remarks").value;
-
-if(!name || !owner){
-alert("Project Name and Owner are required.");
-return;
-}
-
-projects.push({
-id:Date.now(),
-name,
-owner,
-startDate,
-status,
-remarks
-});
-
-saveData();
-render();
-
-document.getElementById("projectName").value="";
-document.getElementById("owner").value="";
-document.getElementById("startDate").value="";
-document.getElementById("remarks").value="";
-}
-
-function getProjectAge(startDate){
-
-if(!startDate) return "-";
-
-const start = new Date(startDate);
-const today = new Date();
-
-const diff =
-Math.floor((today-start)/(1000*60*60*24));
-
-return diff;
-}
-
-function updateDashboard(){
-
-const total = projects.length;
-
-const completed =
-projects.filter(x=>x.status==="Completed").length;
-
-const inProgress =
-projects.filter(x=>x.status==="In Progress").length;
-
-const atRisk =
-projects.filter(x=>x.status==="At Risk").length;
-
-const notStarted =
-projects.filter(x=>x.status==="Not Started").length;
-
-const completion =
-total>0 ?
-Math.round((completed/total)*100)
-:0;
-
-document.getElementById("totalProjects").innerText=total;
-document.getElementById("completed").innerText=completed;
-document.getElementById("inProgress").innerText=inProgress;
-document.getElementById("atRisk").innerText=atRisk;
-document.getElementById("notStarted").innerText=notStarted;
-document.getElementById("completionRate").innerText=completion+"%";
-}
-
-function render(){
-
-const table =
-document.getElementById("projectTable");
-
-table.innerHTML = "";
-
-projects.forEach(project=>{
-
-table.innerHTML += `
-<tr class="border-t">
-
-<td class="p-4 font-medium">
-${project.name}
-</td>
-
-<td class="p-4">
-${project.owner}
-</td>
-
-<td class="p-4">
-${project.startDate}
-</td>
-
-<td class="p-4">
-
-<select
-class="border rounded px-2 py-1"
-onchange="updateStatus(${project.id},this.value)">
-
-<option ${project.status==="Not Started"?"selected":""}>
-Not Started
-</option>
-
-<option ${project.status==="In Progress"?"selected":""}>
-In Progress
-</option>
-
-<option ${project.status==="Completed"?"selected":""}>
-Completed
-</option>
-
-<option ${project.status==="At Risk"?"selected":""}>
-At Risk
-</option>
-
-</select>
-
-</td>
-
-<td class="p-4">
-
-<input
-value="${project.remarks}"
-class="border rounded px-3 py-2 w-full"
-onchange="updateRemarks(${project.id},this.value)">
-
-</td>
-
-<td class="p-4">
-${getProjectAge(project.startDate)}
-</td>
-
-</tr>
-`;
-});
-
-updateDashboard();
-}
-
-function updateStatus(id,value){
-
-projects =
-projects.map(p =>
-p.id===id
-? {...p,status:value}
-: p
-);
-
-saveData();
-render();
-}
-
-function updateRemarks(id,value){
-
-projects =
-projects.map(p =>
-p.id===id
-? {...p,remarks:value}
-: p
-);
-
-saveData();
-}
-
-render();
-
-</script>
-
-</body>
-</html>
+            class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-

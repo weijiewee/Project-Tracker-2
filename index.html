@@ -3,39 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Portfolio Tracker</title>
+<title>UOB Project Opportunities Tracker</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 min-h-screen">
-<div class="max-w-7xl mx-auto p-6">
-<h1 class="text-4xl font-bold mb-6">Project Portfolio Tracker</h1>
-<div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-<div class="bg-white p-4 rounded shadow"><div>Total Projects</div><div id="totalProjects">0</div></div>
-<div class="bg-blue-100 p-4 rounded shadow"><div>In Progress</div><div id="inProgress">0</div></div>
-<div class="bg-green-100 p-4 rounded shadow"><div>Completed</div><div id="completed">0</div></div>
-<div class="bg-red-100 p-4 rounded shadow"><div>At Risk</div><div id="atRisk">0</div></div>
-<div class="bg-gray-100 p-4 rounded shadow"><div>Not Started</div><div id="notStarted">0</div></div>
-<div class="bg-emerald-100 p-4 rounded shadow"><div>Completion %</div><div id="completionRate">0%</div></div>
+<div class="max-w-6xl mx-auto p-6">
+<h1 class="text-5xl font-bold text-slate-800 mb-6">UOB Project Opportunities Tracker</h1>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+<div class="bg-white p-4 rounded-xl shadow"><div>Total Opportunities</div><div id="totalProjects">0</div></div>
+<div class="bg-gray-100 p-4 rounded-xl shadow"><div>Identified</div><div id="identified">0</div></div>
+<div class="bg-blue-100 p-4 rounded-xl shadow"><div>In Discussions</div><div id="discussions">0</div></div>
+<div class="bg-orange-100 p-4 rounded-xl shadow"><div>Proposal/RFP</div><div id="proposal">0</div></div>
+<div class="bg-green-100 p-4 rounded-xl shadow"><div>Secured</div><div id="secured">0</div></div>
 </div>
-<div class="bg-white p-6 rounded shadow mb-6">
+<div class="bg-white p-6 rounded-xl shadow mb-6">
 <div class="grid md:grid-cols-5 gap-3">
-<input id="projectName" class="border p-2" placeholder="Project Name">
-<input id="owner" class="border p-2" placeholder="Owner">
-<input id="startDate" type="date" class="border p-2">
-<select id="status" class="border p-2"><option>Not Started</option><option>In Progress</option><option>Completed</option><option>At Risk</option></select>
-<input id="remarks" class="border p-2" placeholder="Remarks">
+<input id="projectName" class="border p-3 rounded" placeholder="Project Name">
+<input id="owner" class="border p-3 rounded" placeholder="Owner">
+<input id="startDate" type="date" class="border p-3 rounded">
+<select id="status" class="border p-3 rounded"><option>Identified</option><option>In Discussions</option><option>Proposal/RFP</option><option>Secured</option></select>
+<input id="remarks" class="border p-3 rounded" placeholder="Remarks">
 </div>
-<button onclick="addProject()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Add Project</button>
+<button onclick="addProject()" class="mt-4 bg-blue-600 text-white px-5 py-2 rounded">Add Project</button>
 </div>
-<div class="bg-white rounded shadow overflow-auto">
+<div class="bg-white rounded-xl shadow overflow-hidden">
 <table class="w-full">
-<thead>
+<thead class="bg-slate-800 text-white">
 <tr>
-<th class="text-left p-2">Project Name</th>
-<th class="text-left p-2">Owner</th>
-<th class="text-left p-2">Start Date</th>
-<th class="text-left p-2">Status</th>
-<th class="text-left p-2">Remarks</th>
+<th class="text-left p-3">Project Name</th>
+<th class="text-left p-3">Owner</th>
+<th class="text-left p-3">Start Date</th>
+<th class="text-left p-3">Status</th>
+<th class="text-left p-3">Remarks</th>
+<th class="text-left p-3">Action</th>
 </tr>
 </thead>
 <tbody id="projectTable"></tbody>
@@ -44,27 +44,32 @@
 </div>
 <script>
 let projects=[];
-function addProject(){const p={id:Date.now(),projectName:projectName.value,owner:owner.value,startDate:startDate.value,status:status.value,remarks:remarks.value}; if(!p.projectName||!p.owner){
-    alert('Project Name and Owner are required');
-    return;
+function addProject(){
+const p={id:Date.now(),projectName:projectName.value.trim(),owner:owner.value.trim(),startDate:startDate.value,status:status.value,remarks:remarks.value};
+if(!p.projectName||!p.owner){alert('Project Name and Owner are required.');return;}
+const duplicate=projects.find(x=>x.projectName.toLowerCase()===p.projectName.toLowerCase());
+if(duplicate){alert('Existing Project. Please find record below and edit instead.');return;}
+projects.push(p);render();
+projectName.value='';owner.value='';startDate.value='';remarks.value='';status.value='Identified';
 }
-
-const duplicateProject =
-projects.find(
-    x => x.projectName.toLowerCase().trim() ===
-         p.projectName.toLowerCase().trim()
-);
-
-if(duplicateProject){
-    alert(
-      'Existing Project. Existing Project. Please find the existing record below and update Status or Remarks directly.'
-    );
-    return;
-} projects.push(p); render();}
-function updateStatus(id,v){projects=projects.map(p=>p.id===id?{...p,status:v}:p); updateDashboard();}
+function deleteProject(id){if(!confirm('Are you sure you want to delete this project?')) return; projects=projects.filter(p=>p.id!==id);render();}
+function updateStatus(id,v){projects=projects.map(p=>p.id===id?{...p,status:v}:p);updateDashboard();}
 function updateRemarks(id,v){projects=projects.map(p=>p.id===id?{...p,remarks:v}:p);}
-function updateDashboard(){let t=projects.length,c=projects.filter(x=>x.status==='Completed').length,ip=projects.filter(x=>x.status==='In Progress').length,ar=projects.filter(x=>x.status==='At Risk').length,ns=projects.filter(x=>x.status==='Not Started').length; totalProjects.innerText=t;completed.innerText=c;inProgress.innerText=ip;atRisk.innerText=ar;notStarted.innerText=ns;completionRate.innerText=t?Math.round(c*100/t)+'%':'0%';}
-function render(){projectTable.innerHTML='';projects.forEach(project=>{projectTable.innerHTML+=`<tr><td>${project.projectName}</td><td>${project.owner}</td><td>${project.startDate}</td><td><select onchange="updateStatus(${project.id},this.value)"><option ${project.status==='Not Started'?'selected':''}>Not Started</option><option ${project.status==='In Progress'?'selected':''}>In Progress</option><option ${project.status==='Completed'?'selected':''}>Completed</option><option ${project.status==='At Risk'?'selected':''}>At Risk</option></select></td><td><input value="${project.remarks}" onchange="updateRemarks(${project.id},this.value)"></td></tr>`;}); updateDashboard();}
+function updateDashboard(){
+const total=projects.length;
+totalProjects.innerText=total;
+identified.innerText=projects.filter(x=>x.status==='Identified').length;
+discussions.innerText=projects.filter(x=>x.status==='In Discussions').length;
+proposal.innerText=projects.filter(x=>x.status==='Proposal/RFP').length;
+secured.innerText=projects.filter(x=>x.status==='Secured').length;
+}
+function render(){
+projectTable.innerHTML='';
+projects.forEach(project=>{
+projectTable.innerHTML+=`<tr class="border-b hover:bg-blue-50 transition"><td class="p-3">${project.projectName}</td><td class="p-3">${project.owner}</td><td class="p-3">${project.startDate}</td><td class="p-3"><select class="border rounded-lg px-3 py-2" onchange="updateStatus(${project.id},this.value)"><option ${project.status==='Identified'?'selected':''}>Identified</option><option ${project.status==='In Discussions'?'selected':''}>In Discussions</option><option ${project.status==='Proposal/RFP'?'selected':''}>Proposal/RFP</option><option ${project.status==='Secured'?'selected':''}>Secured</option></select></td><td class="p-3"><input class="border rounded-lg px-3 py-2 w-full" value="${project.remarks}" onchange="updateRemarks(${project.id},this.value)"></td><td class="p-3"><button onclick="deleteProject(${project.id})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button></td></tr>`;
+});
+updateDashboard();
+}
 render();
 </script>
 </body>

@@ -4,344 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Portfolio Tracker</title>
-
-https://cdn.tailwindcss.comscript>
-
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body class="bg-slate-100 min-h-screen">
-
 <div class="max-w-7xl mx-auto p-6">
-
-    <div class="mb-8">
-        <h1 class="text-5xl font-bold text-slate-800">
-            Project Portfolio Tracker
-        </h1>
-        <p class="text-slate-500 mt-2">
-            Executive Dashboard for Project Tracking
-        </p>
-    </div>
-
-    <!-- Dashboard -->
-
-    <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
-
-        <div class="bg-white rounded-2xl shadow p-5">
-            <div class="text-gray-500">Total Projects</div>
-            <div id="totalProjects" class="text-3xl font-bold">0</div>
-        </div>
-
-        <div class="bg-blue-100 rounded-2xl shadow p-5">
-            <div class="text-blue-700">In Progress</div>
-            <div id="inProgress" class="text-3xl font-bold">0</div>
-        </div>
-
-        <div class="bg-green-100 rounded-2xl shadow p-5">
-            <div class="text-green-700">Completed</div>
-            <div id="completed" class="text-3xl font-bold">0</div>
-        </div>
-
-        <div class="bg-red-100 rounded-2xl shadow p-5">
-            <div class="text-red-700">At Risk</div>
-            <div id="atRisk" class="text-3xl font-bold">0</div>
-        </div>
-
-        <div class="bg-gray-100 rounded-2xl shadow p-5">
-            <div class="text-gray-700">Not Started</div>
-            <div id="notStarted" class="text-3xl font-bold">0</div>
-        </div>
-
-        <div class="bg-emerald-100 rounded-2xl shadow p-5">
-            <div class="text-emerald-700">Completion %</div>
-            <div id="completionRate" class="text-3xl font-bold">0%</div>
-        </div>
-
-    </div>
-
-    <!-- Add Project -->
-
-    <div class="bg-white rounded-2xl shadow p-6 mb-8">
-
-        <h2 class="text-2xl font-bold mb-5">
-            Add Project
-        </h2>
-
-        <div class="grid md:grid-cols-5 gap-4">
-
-            <input
-                id="projectName"
-                class="border rounded-lg p-3"
-                placeholder="Project Name">
-
-            <input
-                id="owner"
-                class="border rounded-lg p-3"
-                placeholder="Owner">
-
-            <input
-                id="startDate"
-                type="date"
-                class="border rounded-lg p-3">
-
-            <select
-                id="status"
-                class="border rounded-lg p-3">
-
-                <option>Not Started</option>
-                <option>In Progress</option>
-                <option>Completed</option>
-                <option>At Risk</option>
-
-            </select>
-
-            <input
-                id="remarks"
-                class="border rounded-lg p-3"
-                placeholder="Remarks">
-
-        </div>
-
-        <button
-            onclick="addProject()"
-            class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-            Add Project
-        </button>
-
-    </div>
-
-    <!-- Portfolio -->
-
-    <div class="bg-white rounded-2xl shadow overflow-hidden">
-
-        <div class="p-6 border-b">
-            <h2 class="text-2xl font-bold">
-                Project Portfolio
-            </h2>
-        </div>
-
-        <div class="overflow-x-auto">
-
-            <table class="w-full">
-
-                <thead class="bg-slate-50">
-
-                    <tr>
-                        <th class="p-4 text-left">Project Name</th>
-                        <th class="p-4 text-left">Owner</th>
-                        <th class="p-4 text-left">Start Date</th>
-                        <th class="p-4 text-left">Status</th>
-                        <th class="p-4 text-left">Remarks</th>
-                        <th class="p-4 text-left">Age (Days)</th>
-                    </tr>
-
-                </thead>
-
-                <tbody id="projectTable">
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
+<h1 class="text-4xl font-bold mb-6">Project Portfolio Tracker</h1>
+<div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
+<div class="bg-white p-4 rounded shadow"><div>Total Projects</div><div id="totalProjects">0</div></div>
+<div class="bg-blue-100 p-4 rounded shadow"><div>In Progress</div><div id="inProgress">0</div></div>
+<div class="bg-green-100 p-4 rounded shadow"><div>Completed</div><div id="completed">0</div></div>
+<div class="bg-red-100 p-4 rounded shadow"><div>At Risk</div><div id="atRisk">0</div></div>
+<div class="bg-gray-100 p-4 rounded shadow"><div>Not Started</div><div id="notStarted">0</div></div>
+<div class="bg-emerald-100 p-4 rounded shadow"><div>Completion %</div><div id="completionRate">0%</div></div>
 </div>
-
+<div class="bg-white p-6 rounded shadow mb-6">
+<div class="grid md:grid-cols-5 gap-3">
+<input id="projectName" class="border p-2" placeholder="Project Name">
+<input id="owner" class="border p-2" placeholder="Owner">
+<input id="startDate" type="date" class="border p-2">
+<select id="status" class="border p-2"><option>Not Started</option><option>In Progress</option><option>Completed</option><option>At Risk</option></select>
+<input id="remarks" class="border p-2" placeholder="Remarks">
+</div>
+<button onclick="addProject()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Add Project</button>
+</div>
+<div class="bg-white rounded shadow overflow-auto">
+<table class="w-full">
+<thead><tr><th>Project Name</th><th>Owner</th><th>Start Date</th><th>Status</th><th>Remarks</th><th>Age (Days)</th></tr></thead>
+<tbody id="projectTable"></tbody>
+</table>
+</div>
+</div>
 <script>
-
-let projects = [];
-
-function getAge(startDate){
-
-    if(!startDate) return "-";
-
-    const start = new Date(startDate);
-    const today = new Date();
-
-    return Math.floor(
-        (today - start) /
-        (1000 * 60 * 60 * 24)
-    );
-}
-
-function addProject(){
-
-    const projectName =
-        document.getElementById("projectName").value;
-
-    const owner =
-        document.getElementById("owner").value;
-
-    const startDate =
-        document.getElementById("startDate").value;
-
-    const status =
-        document.getElementById("status").value;
-
-    const remarks =
-        document.getElementById("remarks").value;
-
-    if(!projectName || !owner){
-        alert("Project Name and Owner are required.");
-        return;
-    }
-
-    projects.push({
-        id: Date.now(),
-        projectName,
-        owner,
-        startDate,
-        status,
-        remarks
-    });
-
-    render();
-
-    document.getElementById("projectName").value="";
-    document.getElementById("owner").value="";
-    document.getElementById("startDate").value="";
-    document.getElementById("remarks").value="";
-}
-
-function updateStatus(id,value){
-
-    projects = projects.map(project =>
-        project.id === id
-            ? {...project,status:value}
-            : project
-    );
-
-    updateDashboard();
-}
-
-function updateRemarks(id,value){
-
-    projects = projects.map(project =>
-        project.id === id
-            ? {...project,remarks:value}
-            : project
-    );
-}
-
-function updateDashboard(){
-
-    const total = projects.length;
-
-    const completed =
-        projects.filter(x =>
-            x.status === "Completed"
-        ).length;
-
-    const inProgress =
-        projects.filter(x =>
-            x.status === "In Progress"
-        ).length;
-
-    const atRisk =
-        projects.filter(x =>
-            x.status === "At Risk"
-        ).length;
-
-    const notStarted =
-        projects.filter(x =>
-            x.status === "Not Started"
-        ).length;
-
-    document.getElementById("totalProjects").innerText =
-        total;
-
-    document.getElementById("completed").innerText =
-        completed;
-
-    document.getElementById("inProgress").innerText =
-        inProgress;
-
-    document.getElementById("atRisk").innerText =
-        atRisk;
-
-    document.getElementById("notStarted").innerText =
-        notStarted;
-
-    document.getElementById("completionRate").innerText =
-        total === 0
-        ? "0%"
-        : Math.round((completed/total)*100) + "%";
-}
-
-function render(){
-
-    const table =
-        document.getElementById("projectTable");
-
-    table.innerHTML = "";
-
-    projects.forEach(project => {
-
-        table.innerHTML += `
-        <tr class="border-t">
-
-            <td class="p-4">
-                ${project.projectName}
-            </td>
-
-            <td class="p-4">
-                ${project.owner}
-            </td>
-
-            <td class="p-4">
-                ${project.startDate}
-            </td>
-
-            <td class="p-4">
-
-                <select
-                  class="border rounded p-2"
-                  onchange="updateStatus(${project.id},this.value)">
-
-                    <option ${project.status==="Not Started"?"selected":""}>
-                        Not Started
-                    </option>
-
-                    <option ${project.status==="In Progress"?"selected":""}>
-                        In Progress
-                    </option>
-
-                    <option ${project.status==="Completed"?"selected":""}>
-                        Completed
-                    </option>
-
-                    <option ${project.status==="At Risk"?"selected":""}>
-                        At Risk
-                    </option>
-
-                </select>
-
-            </td>
-
-            <td class="p-4">
-
-                <input
-                    class="border rounded p-2 w-full"
-                    value="${project.remarks}"
-                    onchange="updateRemarks(${project.id},this.value)">
-
-            </td>
-
-            <td class="p-4">
-                ${getAge(project.startDate)}
-            </td>
-
-        </tr>
-        `;
-    });
-
-    updateDashboard();
-}
-
+let projects=[];
+function getAge(d){if(!d) return '-'; return Math.floor((new Date()-new Date(d))/86400000);} 
+function addProject(){const p={id:Date.now(),projectName:projectName.value,owner:owner.value,startDate:startDate.value,status:status.value,remarks:remarks.value}; if(!p.projectName||!p.owner){alert('Project Name and Owner are required');return;} projects.push(p); render();}
+function updateStatus(id,v){projects=projects.map(p=>p.id===id?{...p,status:v}:p); updateDashboard();}
+function updateRemarks(id,v){projects=projects.map(p=>p.id===id?{...p,remarks:v}:p);}
+function updateDashboard(){let t=projects.length,c=projects.filter(x=>x.status==='Completed').length,ip=projects.filter(x=>x.status==='In Progress').length,ar=projects.filter(x=>x.status==='At Risk').length,ns=projects.filter(x=>x.status==='Not Started').length; totalProjects.innerText=t;completed.innerText=c;inProgress.innerText=ip;atRisk.innerText=ar;notStarted.innerText=ns;completionRate.innerText=t?Math.round(c*100/t)+'%':'0%';}
+function render(){projectTable.innerHTML='';projects.forEach(project=>{projectTable.innerHTML+=`<tr><td>${project.projectName}</td><td>${project.owner}</td><td>${project.startDate}</td><td><select onchange="updateStatus(${project.id},this.value)"><option ${project.status==='Not Started'?'selected':''}>Not Started</option><option ${project.status==='In Progress'?'selected':''}>In Progress</option><option ${project.status==='Completed'?'selected':''}>Completed</option><option ${project.status==='At Risk'?'selected':''}>At Risk</option></select></td><td><input value="${project.remarks}" onchange="updateRemarks(${project.id},this.value)"></td><td>${getAge(project.startDate)}</td></tr>`;}); updateDashboard();}
 render();
-
 </script>
-
 </body>
 </html>

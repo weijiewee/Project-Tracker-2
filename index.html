@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Portfolio Tracker</title>
 
-    <title>Project Portfolio Tracker</title>
+https://cdn.tailwindcss.comscript>
 
-   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-slate-100 min-h-screen">
@@ -15,7 +14,7 @@
 <div class="max-w-7xl mx-auto p-6">
 
     <div class="mb-8">
-        <h1 class="text-4xl font-bold text-slate-800">
+        <h1 class="text-5xl font-bold text-slate-800">
             Project Portfolio Tracker
         </h1>
         <p class="text-slate-500 mt-2">
@@ -63,26 +62,30 @@
 
     <div class="bg-white rounded-2xl shadow p-6 mb-8">
 
-        <h2 class="text-xl font-bold mb-4">
+        <h2 class="text-2xl font-bold mb-5">
             Add Project
         </h2>
 
         <div class="grid md:grid-cols-5 gap-4">
 
-            <input id="projectName"
-                   class="border rounded-lg p-3"
-                   placeholder="Project Name">
+            <input
+                id="projectName"
+                class="border rounded-lg p-3"
+                placeholder="Project Name">
 
-            <input id="owner"
-                   class="border rounded-lg p-3"
-                   placeholder="Owner">
+            <input
+                id="owner"
+                class="border rounded-lg p-3"
+                placeholder="Owner">
 
-            <input id="startDate"
-                   type="date"
-                   class="border rounded-lg p-3">
+            <input
+                id="startDate"
+                type="date"
+                class="border rounded-lg p-3">
 
-            <select id="status"
-                    class="border rounded-lg p-3">
+            <select
+                id="status"
+                class="border rounded-lg p-3">
 
                 <option>Not Started</option>
                 <option>In Progress</option>
@@ -91,9 +94,10 @@
 
             </select>
 
-            <input id="remarks"
-                   class="border rounded-lg p-3"
-                   placeholder="Remarks">
+            <input
+                id="remarks"
+                class="border rounded-lg p-3"
+                placeholder="Remarks">
 
         </div>
 
@@ -105,12 +109,12 @@
 
     </div>
 
-    <!-- Project Portfolio -->
+    <!-- Portfolio -->
 
     <div class="bg-white rounded-2xl shadow overflow-hidden">
 
         <div class="p-6 border-b">
-            <h2 class="text-xl font-bold">
+            <h2 class="text-2xl font-bold">
                 Project Portfolio
             </h2>
         </div>
@@ -132,7 +136,9 @@
 
                 </thead>
 
-                <tbody id="projectTable"></tbody>
+                <tbody id="projectTable">
+
+                </tbody>
 
             </table>
 
@@ -144,93 +150,198 @@
 
 <script>
 
-let projects = [
-{
-id:1,
-name:"ERP Transformation",
-owner:"Sarah Lim",
-startDate:"2026-01-01",
-status:"In Progress",
-remarks:"UAT ongoing"
-},
-{
-id:2,
-name:"CRM Migration",
-owner:"John Tan",
-startDate:"2026-02-15",
-status:"Completed",
-remarks:"Successfully deployed"
-}
-];
+let projects = [];
 
 function getAge(startDate){
+
+    if(!startDate) return "-";
+
     const start = new Date(startDate);
     const today = new Date();
-    return Math.floor((today-start)/(1000*60*60*24));
+
+    return Math.floor(
+        (today - start) /
+        (1000 * 60 * 60 * 24)
+    );
 }
 
 function addProject(){
 
-    const project = {
-        id: Date.now(),
-        name: document.getElementById("projectName").value,
-        owner: document.getElementById("owner").value,
-        startDate: document.getElementById("startDate").value,
-        status: document.getElementById("status").value,
-        remarks: document.getElementById("remarks").value
-    };
+    const projectName =
+        document.getElementById("projectName").value;
 
-    if(!project.name || !project.owner){
+    const owner =
+        document.getElementById("owner").value;
+
+    const startDate =
+        document.getElementById("startDate").value;
+
+    const status =
+        document.getElementById("status").value;
+
+    const remarks =
+        document.getElementById("remarks").value;
+
+    if(!projectName || !owner){
         alert("Project Name and Owner are required.");
         return;
     }
 
-    projects.push(project);
+    projects.push({
+        id: Date.now(),
+        projectName,
+        owner,
+        startDate,
+        status,
+        remarks
+    });
+
     render();
+
+    document.getElementById("projectName").value="";
+    document.getElementById("owner").value="";
+    document.getElementById("startDate").value="";
+    document.getElementById("remarks").value="";
 }
 
 function updateStatus(id,value){
 
-    projects = projects.map(p =>
-        p.id===id
-        ? {...p,status:value}
-        : p
+    projects = projects.map(project =>
+        project.id === id
+            ? {...project,status:value}
+            : project
     );
 
-    render();
+    updateDashboard();
 }
 
 function updateRemarks(id,value){
 
-    projects = projects.map(p =>
-        p.id===id
-        ? {...p,remarks:value}
-        : p
+    projects = projects.map(project =>
+        project.id === id
+            ? {...project,remarks:value}
+            : project
     );
+}
+
+function updateDashboard(){
+
+    const total = projects.length;
+
+    const completed =
+        projects.filter(x =>
+            x.status === "Completed"
+        ).length;
+
+    const inProgress =
+        projects.filter(x =>
+            x.status === "In Progress"
+        ).length;
+
+    const atRisk =
+        projects.filter(x =>
+            x.status === "At Risk"
+        ).length;
+
+    const notStarted =
+        projects.filter(x =>
+            x.status === "Not Started"
+        ).length;
+
+    document.getElementById("totalProjects").innerText =
+        total;
+
+    document.getElementById("completed").innerText =
+        completed;
+
+    document.getElementById("inProgress").innerText =
+        inProgress;
+
+    document.getElementById("atRisk").innerText =
+        atRisk;
+
+    document.getElementById("notStarted").innerText =
+        notStarted;
+
+    document.getElementById("completionRate").innerText =
+        total === 0
+        ? "0%"
+        : Math.round((completed/total)*100) + "%";
 }
 
 function render(){
 
-    const body=document.getElementById("projectTable");
+    const table =
+        document.getElementById("projectTable");
 
-    body.innerHTML="";
+    table.innerHTML = "";
 
-    projects.forEach(project=>{
+    projects.forEach(project => {
 
-        body.innerHTML += `
-
+        table.innerHTML += `
         <tr class="border-t">
 
-            <td class="p-4">${project.name}</td>
+            <td class="p-4">
+                ${project.projectName}
+            </td>
 
-            <td class="p-4">${project.owner}</td>
+            <td class="p-4">
+                ${project.owner}
+            </td>
 
-            <td class="p-4">${project.startDate}</td>
+            <td class="p-4">
+                ${project.startDate}
+            </td>
 
             <td class="p-4">
 
                 <select
-                    onchange="updateStatus(${project.id},this.value)"
-                    class="border rounded-lg p-2">
+                  class="border rounded p-2"
+                  onchange="updateStatus(${project.id},this.value)">
 
-                    <option ${project.status==="Not Started"?"selected":""}>Not Started</option>
+                    <option ${project.status==="Not Started"?"selected":""}>
+                        Not Started
+                    </option>
+
+                    <option ${project.status==="In Progress"?"selected":""}>
+                        In Progress
+                    </option>
+
+                    <option ${project.status==="Completed"?"selected":""}>
+                        Completed
+                    </option>
+
+                    <option ${project.status==="At Risk"?"selected":""}>
+                        At Risk
+                    </option>
+
+                </select>
+
+            </td>
+
+            <td class="p-4">
+
+                <input
+                    class="border rounded p-2 w-full"
+                    value="${project.remarks}"
+                    onchange="updateRemarks(${project.id},this.value)">
+
+            </td>
+
+            <td class="p-4">
+                ${getAge(project.startDate)}
+            </td>
+
+        </tr>
+        `;
+    });
+
+    updateDashboard();
+}
+
+render();
+
+</script>
+
+</body>
+</html>

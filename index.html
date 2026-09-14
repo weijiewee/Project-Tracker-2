@@ -99,4 +99,138 @@
 
         <button
             onclick="addProject()"
-            class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-
+            class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+            Add Project
+        </button>
+
+    </div>
+
+    <!-- Project Portfolio -->
+
+    <div class="bg-white rounded-2xl shadow overflow-hidden">
+
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-bold">
+                Project Portfolio
+            </h2>
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="bg-slate-50">
+
+                    <tr>
+                        <th class="p-4 text-left">Project Name</th>
+                        <th class="p-4 text-left">Owner</th>
+                        <th class="p-4 text-left">Start Date</th>
+                        <th class="p-4 text-left">Status</th>
+                        <th class="p-4 text-left">Remarks</th>
+                        <th class="p-4 text-left">Age (Days)</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="projectTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let projects = [
+{
+id:1,
+name:"ERP Transformation",
+owner:"Sarah Lim",
+startDate:"2026-01-01",
+status:"In Progress",
+remarks:"UAT ongoing"
+},
+{
+id:2,
+name:"CRM Migration",
+owner:"John Tan",
+startDate:"2026-02-15",
+status:"Completed",
+remarks:"Successfully deployed"
+}
+];
+
+function getAge(startDate){
+    const start = new Date(startDate);
+    const today = new Date();
+    return Math.floor((today-start)/(1000*60*60*24));
+}
+
+function addProject(){
+
+    const project = {
+        id: Date.now(),
+        name: document.getElementById("projectName").value,
+        owner: document.getElementById("owner").value,
+        startDate: document.getElementById("startDate").value,
+        status: document.getElementById("status").value,
+        remarks: document.getElementById("remarks").value
+    };
+
+    if(!project.name || !project.owner){
+        alert("Project Name and Owner are required.");
+        return;
+    }
+
+    projects.push(project);
+    render();
+}
+
+function updateStatus(id,value){
+
+    projects = projects.map(p =>
+        p.id===id
+        ? {...p,status:value}
+        : p
+    );
+
+    render();
+}
+
+function updateRemarks(id,value){
+
+    projects = projects.map(p =>
+        p.id===id
+        ? {...p,remarks:value}
+        : p
+    );
+}
+
+function render(){
+
+    const body=document.getElementById("projectTable");
+
+    body.innerHTML="";
+
+    projects.forEach(project=>{
+
+        body.innerHTML += `
+
+        <tr class="border-t">
+
+            <td class="p-4">${project.name}</td>
+
+            <td class="p-4">${project.owner}</td>
+
+            <td class="p-4">${project.startDate}</td>
+
+            <td class="p-4">
+
+                <select
+                    onchange="updateStatus(${project.id},this.value)"
+                    class="border rounded-lg p-2">
+
+                    <option ${project.status==="Not Started"?"selected":""}>Not Started</option>

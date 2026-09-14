@@ -29,19 +29,42 @@
 </div>
 <div class="bg-white rounded shadow overflow-auto">
 <table class="w-full">
-<thead><tr><th>Project Name</th><th>Owner</th><th>Start Date</th><th>Status</th><th>Remarks</th><th>Age (Days)</th></tr></thead>
+<thead>
+<tr>
+<th class="text-left p-2">Project Name</th>
+<th class="text-left p-2">Owner</th>
+<th class="text-left p-2">Start Date</th>
+<th class="text-left p-2">Status</th>
+<th class="text-left p-2">Remarks</th>
+</tr>
+</thead>
 <tbody id="projectTable"></tbody>
 </table>
 </div>
 </div>
 <script>
 let projects=[];
-function getAge(d){if(!d) return '-'; return Math.floor((new Date()-new Date(d))/86400000);} 
-function addProject(){const p={id:Date.now(),projectName:projectName.value,owner:owner.value,startDate:startDate.value,status:status.value,remarks:remarks.value}; if(!p.projectName||!p.owner){alert('Project Name and Owner are required');return;} projects.push(p); render();}
+function addProject(){const p={id:Date.now(),projectName:projectName.value,owner:owner.value,startDate:startDate.value,status:status.value,remarks:remarks.value}; if(!p.projectName||!p.owner){
+    alert('Project Name and Owner are required');
+    return;
+}
+
+const duplicateProject =
+projects.find(
+    x => x.projectName.toLowerCase().trim() ===
+         p.projectName.toLowerCase().trim()
+);
+
+if(duplicateProject){
+    alert(
+      'Existing Project. Existing Project. Please find the existing record below and update Status or Remarks directly.'
+    );
+    return;
+} projects.push(p); render();}
 function updateStatus(id,v){projects=projects.map(p=>p.id===id?{...p,status:v}:p); updateDashboard();}
 function updateRemarks(id,v){projects=projects.map(p=>p.id===id?{...p,remarks:v}:p);}
 function updateDashboard(){let t=projects.length,c=projects.filter(x=>x.status==='Completed').length,ip=projects.filter(x=>x.status==='In Progress').length,ar=projects.filter(x=>x.status==='At Risk').length,ns=projects.filter(x=>x.status==='Not Started').length; totalProjects.innerText=t;completed.innerText=c;inProgress.innerText=ip;atRisk.innerText=ar;notStarted.innerText=ns;completionRate.innerText=t?Math.round(c*100/t)+'%':'0%';}
-function render(){projectTable.innerHTML='';projects.forEach(project=>{projectTable.innerHTML+=`<tr><td>${project.projectName}</td><td>${project.owner}</td><td>${project.startDate}</td><td><select onchange="updateStatus(${project.id},this.value)"><option ${project.status==='Not Started'?'selected':''}>Not Started</option><option ${project.status==='In Progress'?'selected':''}>In Progress</option><option ${project.status==='Completed'?'selected':''}>Completed</option><option ${project.status==='At Risk'?'selected':''}>At Risk</option></select></td><td><input value="${project.remarks}" onchange="updateRemarks(${project.id},this.value)"></td><td>${getAge(project.startDate)}</td></tr>`;}); updateDashboard();}
+function render(){projectTable.innerHTML='';projects.forEach(project=>{projectTable.innerHTML+=`<tr><td>${project.projectName}</td><td>${project.owner}</td><td>${project.startDate}</td><td><select onchange="updateStatus(${project.id},this.value)"><option ${project.status==='Not Started'?'selected':''}>Not Started</option><option ${project.status==='In Progress'?'selected':''}>In Progress</option><option ${project.status==='Completed'?'selected':''}>Completed</option><option ${project.status==='At Risk'?'selected':''}>At Risk</option></select></td><td><input value="${project.remarks}" onchange="updateRemarks(${project.id},this.value)"></td></tr>`;}); updateDashboard();}
 render();
 </script>
 </body>
